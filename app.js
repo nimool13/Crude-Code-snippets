@@ -76,7 +76,7 @@ app.use(function (err, req, res, next) {
   res.render('error')
 })
 
-mongoose.connect('mongodb+srv://nima:yJY3mEVOBy8IeL4s@cluster0.ulanwhq.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+mongoose.connect('mongodb+srv://******', { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
   console.log('Connected to MongoDB successfully!')
 })
 app.listen(process.env.PORT || 3000, function () {
