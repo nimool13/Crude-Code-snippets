@@ -1,0 +1,40 @@
+<% for (let snippet of snippets) { %>
+<div class="card mb-3">
+  <header class="card-header">
+    <a href="/snippet/<%- snippet.id %>">
+      <h1 class="card-header-title is-size-3"><%- snippet.title %></h1>
+    </a>
+  </header>
+  <div class="card-content">
+    <div class="has-text-grey is-flex">
+      <a href="/language/<%- snippet.language %>">
+        <span class="tag is-info mr-2"><%- snippet.language %></span>
+      </a>
+      <p>
+        Created <span class="created-at"><%- snippet.createdAt %></span> - by
+        <a href="/user/<%- snippet.user.username %>">
+          <%- snippet.user.username %> <%- locals.user && locals.user._id === snippet.user.id ? '(you)' : '' %>
+        </a>
+      </p>
+    </div>
+    <p class="py-2"><%- snippet.description %></p>
+    <pre class="language-<%- snippet.language %> line-numbers"><code><%= snippet.code %></code></pre>
+  </div>
+</div>
+<% } %>
+<style>
+  /* add shadow & animation when hover card */
+  .card {
+    transition: all 0.3s ease-in-out;
+  }
+  .card:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  /* hover card title */
+  .card-header-title {
+    transition: color 0.3s ease-in-out;
+  }
+  .card-header-title:hover {
+    color: #3273dc;
+  }
+</style>

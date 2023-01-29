@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head.ejs') %> <%- include('../partials/prism/head.ejs') %>
+  </head>
+  <body>
+    <%- include('../partials/navbar.ejs') %>
+    <div class="container">
+      <h1 class="title is-size-3"><%= snippet.title %></h1>
+
+      <div class="has-text-grey is-flex">
+        <a href="/language/<%- snippet.language %>">
+          <span class="tag is-info mr-2"><%- snippet.language %></span>
+        </a>
+        <p>
+          Created <span class="created-at"><%- snippet.createdAt %></span> - by
+          <a href="/user/<%- snippet.user.username %>"> <%- snippet.user.username %> </a>
+        </p>
+      </div>
+      <p class="py-4"><%= snippet.description %></p>
+      <pre
+        class="language-<%- snippet.language %> line-numbers"
+        style="max-height: 500px"
+      ><code><%= snippet.code %></code></pre>
+
+      <div class="is-flex is-justify-content-space-between">
+        <div class="is-flex">
+          <button id="copyBtn" class="button is-info mr-2">
+            <span class="icon is-small">
+              <span class="iconify" data-icon="akar-icons:copy"></span>
+            </span>
+          </button>
+          <button id="downloadBtn" class="button is-link">
+            <span class="icon is-small">
+              <span class="iconify" data-icon="akar-icons:download"></span>
+            </span>
+          </button>
+        </div>
+
+        <% if (user && user._id === snippet.user.id) { %>
+        <div class="is-flex">
+          <a class="button is-warning mr-2" href="/snippet/<%- snippet._id %>/edit">
+            <span class="icon is-small">
+              <span class="iconify" data-icon="akar-icons:edit"></span>
+            </span>
+          </a>
+          <%- include('../partials/snippet/delete-button.ejs', {icon: true}) %>
+        </div>
+        <% } %>
+      </div>
+    </div>
+    <%- include('../partials/footer') %> <%- include('../partials/prism/script') %> <%-
+    include('../partials/dayjs/script') %>
+    <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    <script src="/js/languages.js"></script>
+    <script>
+      function copy(text) {
+        const el = document.createElement('textarea')
+        el.value = text
+        document.body.appendChild(el)
+        el.select()
+        document.execCommand('copy')
+        document.body.removeChild(el)
+        createToast('Copied to clipboard', 'is-success')
+      }
+
+      function downloadCode(text) {
+        const el = document.createElement('a')
+        const { language, extension } = findLanguage('<%- snippet.language %>')
+        el.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+        el.setAttribute('download', `<%- snippet.title %>${extension}`)
+        document.body.appendChild(el)
+        el.click()
+        document.body.removeChild(el)
+        createToast('Downloaded', 'is-success')
+      }
+
+      document.getElementById('copyBtn').addEventListener('click', () => {
+        copy(document.querySelector('pre code').textContent)
+      })
+
+      document.getElementById('downloadBtn').addEventListener('click', () => {
+        downloadCode(document.querySelector('pre code').textContent)
+      })
+    </script>
+  </body>
+</html>

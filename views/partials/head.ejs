@@ -1,0 +1,40 @@
+<link rel="icon" type="image/x-icon" href="/images/logo.png" />
+<title>Code Snippet</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.0.0/animate.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/bulma-toast@2.4.1/dist/bulma-toast.min.js"></script>
+<style>
+  body {
+    max-width: 712px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .container {
+    padding-bottom: 5rem;
+    padding-top: 5rem;
+    min-height: calc(100vh - 60px);
+  }
+  #header {
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    width: 100%;
+  }
+</style>
+<script>
+  function createToast(message, type, duration = 3000) {
+    bulmaToast.toast({
+      message,
+      type,
+      dismissible: true,
+      animate: { in: 'fadeIn', out: 'fadeOut' },
+    })
+  }
+</script>
+<% if (locals.notification) { %>
+<script>
+  // wait for the DOM to be loaded before creating the toast
+  document.addEventListener('DOMContentLoaded', () => {
+    createToast('<%- notification.message %>', 'is-<%- notification.type %>', 5000)
+  })
+</script>
+<% } %>

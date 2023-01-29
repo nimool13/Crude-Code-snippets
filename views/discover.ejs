@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./partials/head') %> <%- include('./partials/prism/head') %>
+  </head>
+  <body>
+    <%- include('./partials/navbar.ejs') %>
+
+    <div class="container">
+      <% if (locals.header) { %>
+      <header id="header" class="has-text-centered">
+        <h1 class="title is-size-3"><%= header %></h1>
+      </header>
+      <% } %> <%- include('./partials/snippet/list-snippets.ejs') %>
+      <!-- Paginate Button -->
+      <%- include('./partials/snippet/pagination.ejs') %>
+    </div>
+    <%- include('./partials/prism/script') %> <%- include('./partials/dayjs/script') %> <%- include('./partials/footer')
+    %>
+  </body>
+</html>

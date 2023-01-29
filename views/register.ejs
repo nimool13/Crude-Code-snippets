@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./partials/head.ejs') %>
+    <style>
+      .register {
+        margin-top: 100px;
+        max-width: 768px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/navbar.ejs') %>
+    <section class="container">
+      <div class="is-flex is-justify-content-center is-align-items-center">
+        <div class="column has-text-centered" style="margin-top: 5rem">
+          <h1 class="title is-2">Register</h1>
+          <% if (typeof error !== 'undefined') { %>
+          <div class="notification has-text-left is-danger">
+            <p><%= error %></p>
+          </div>
+          <% } %>
+          <form action="/register" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  required
+                  value="<%= locals.username %>"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <input
+                  class="input"
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  required
+                  value="<%= locals.password %>"
+                />
+              </div>
+            </div>
+            <button class="button is-block is-primary is-fullwidth" type="submit">Register</button>
+            <br />
+            <small
+              ><em> Already have an account? <a href="/login">Log in</a> </em></small
+            >
+          </form>
+        </div>
+      </div>
+    </section>
+    <%- include('./partials/footer') %>
+  </body>
+</html>

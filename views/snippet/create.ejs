@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head.ejs') %>
+    <style>
+      #code-editor {
+        height: 300px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/navbar.ejs') %>
+    <section class="container my-4">
+      <form action="/snippet/create" method="POST">
+        <input type="hidden" name="_csrf" value="<%- csrfToken %>" />
+        <div class="field">
+          <label class="label">Title</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Title" name="title" required />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Description</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Description" name="description" />
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">Language</label>
+              <div class="control">
+                <div class="select">
+                  <select name="language" id="languages-select" required></select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Code</label>
+          <div class="control">
+            <input type="hidden" name="code" id="code-input" value="" />
+            <div id="code-editor"></div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <button class="button is-link" type="submit">Create</button>
+          </div>
+        </div>
+      </form>
+    </section>
+    <%- include('../partials/footer') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"
+      integrity="sha256-0SGl1PJNDyJwcV5T+weg2zpEMrh7xvlwO4oXgvZCeZk="
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/languages.js"></script>
+    <script>
+      require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@latest/min/vs' } })
+      window.MonacoEnvironment = { getWorkerUrl: () => proxy }
+      const codeInputEl = document.getElementById('code-input')
+
+      let proxy = URL.createObjectURL(
+        new Blob(
+          [
+            `
+	self.MonacoEnvironment = {
+		baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
+	};
+	importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
+`,
+          ],
+          { type: 'text/javascript' }
+        )
+      )
+
+      require(['vs/editor/editor.main'], function () {
+        let editor = monaco.editor.create(document.getElementById('code-editor'), {
+          value: '',
+          language: 'javascript',
+          theme: 'vs-dark',
+          automaticLayout: true,
+        })
+        window.editor = editor
+
+        const languages = window.languages.map((language) => language.language)
+
+        for (let language of languages) {
+          const option = document.createElement('option')
+          option.setAttribute('value', language)
+          if (language === 'javascript') {
+            option.setAttribute('selected', true)
+          }
+          option.innerText = language
+          languagesSelect.appendChild(option)
+        }
+        editor.getModel().onDidChangeContent((e) => {
+          const content = editor.getValue()
+          codeInputEl.value = content
+        })
+      })
+    </script>
+    <script>
+      const languagesSelect = document.getElementById('languages-select')
+
+      // listen the select language option
+      languagesSelect.addEventListener('change', function (e) {
+        const language = e.target.value
+        const model = window.editor.getModel()
+        monaco.editor.setModelLanguage(model, language)
+      })
+    </script>
+  </body>
+</html>

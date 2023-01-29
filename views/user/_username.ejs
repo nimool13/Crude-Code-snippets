@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head') %> <%- include('../partials/prism/head') %>
+  </head>
+  <style>
+    #header {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+  </style>
+  <body>
+    <%- include('../partials/navbar.ejs') %>
+
+    <div class="container mx-auto">
+      <header id="header" class="has-text-centered">
+        <h1 class="title is-size-3"><%= userInfo.username %></h1>
+        <h1 class="subtitle is-size-5">Total Snippets: <%= totalSnippets %></h1>
+      </header>
+      <%- include('../partials/snippet/list-snippets') %>
+    </div>
+    <%- include('../partials/prism/script') %> <%- include('../partials/dayjs/script') %> <%-
+    include('../partials/footer') %>
+  </body>
+</html>
